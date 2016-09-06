@@ -1,6 +1,7 @@
 package com.example.brunobraga.smarthome;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.os.Bundle;;
 import android.view.View;
@@ -56,11 +57,6 @@ public class loginScreen extends BaseActivity implements
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login_screen);
-
-        // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
-        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
         //Initializae Database
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -78,20 +74,19 @@ public class loginScreen extends BaseActivity implements
                     // User is signed in
                     mDatabase.child("usersUid").child(user.getUid()).addListenerForSingleValueEvent(
                             new ValueEventListener() {
-                                @Override
+                                User logInUser;
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     // Get user value
                                     if(dataSnapshot.getValue() == null){
                                         Log.d(TAG,"New User");
-                                        User newUser = new User(user.getDisplayName(),user.getEmail(),""+user.getPhotoUrl(),user.getUid());
-                                        mDatabase.child("usersUid").child(user.getUid()).setValue(newUser);
+                                        mDatabase.child("usersUid").child(user.getUid()+"/userInfo").setValue(new User(user.getDisplayName(),user.getEmail(),""+user.getPhotoUrl(),user.getUid()));
 
                                     }
                                     else{
-                                        Log.d(TAG,"User "+user.getUid()+" already is on database");
                                         System.out.println(dataSnapshot.getValue());
                                     }
-
+                                    Intent intent = new Intent(loginScreen.this,mainScreen.class);
+                                    startActivity(intent);
                                     // ...
                                 }
 
@@ -108,7 +103,7 @@ public class loginScreen extends BaseActivity implements
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // [START_EXCLUDE]
-                updateUI(user);
+                //updateUI(user);
                 // [END_EXCLUDE]
             }
         };
@@ -130,7 +125,7 @@ public class loginScreen extends BaseActivity implements
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
                 // [START_EXCLUDE]
-                updateUI(null);
+                //updateUI(null);
                 // [END_EXCLUDE]
             }
 
@@ -138,7 +133,7 @@ public class loginScreen extends BaseActivity implements
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
                 // [START_EXCLUDE]
-                updateUI(null);
+                //updateUI(null);
                 // [END_EXCLUDE]
             }
         });
@@ -199,8 +194,13 @@ public class loginScreen extends BaseActivity implements
                     }
                 });
     }
-    // [END auth_with_facebook]
 
+    @Override
+    public void onClick(View view) {
+
+    }
+    // [END auth_with_facebook]
+    /*
     public void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
@@ -232,4 +232,5 @@ public class loginScreen extends BaseActivity implements
             signOut();
         }
     }
+    */
 }

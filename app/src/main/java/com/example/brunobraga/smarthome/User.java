@@ -4,11 +4,13 @@ import android.net.Uri;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by brunobraga on 06/09/16.
  */
 @IgnoreExtraProperties
-public class User {
+public class User{
 
     public String username;
     public String email;

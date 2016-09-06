@@ -1,8 +1,10 @@
 package com.example.brunobraga.smarthome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,16 +15,51 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class mainScreen extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+public class mainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private static final String TAG_QUERY = "QUERY DEBBUG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            System.out.println("User uid "+user.getUid());
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("usersUid").child(user.getUid()+"/userInfo").addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // Get user value
+                            User user = dataSnapshot.getValue(User.class);
+                            System.out.println(user);
+                            // ...
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG_QUERY, "getUser:onCancelled", databaseError.toException());
+                            // ...
+                        }
+                    });
+        } else {
+            System.out.println("tem user logado nao");
+        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +128,10 @@ public class mainScreen extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            mAuth.signOut();
+            LoginManager.getInstance().logOut();
+            Intent intent = new Intent(mainScreen.this,loginScreen.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
