@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="6bc41d9d6fd12d2ef23c785a259011001f4a1a5b">
+        <dex dex="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.4.0_eb32dc5d69f2c5e379c424fe87e49667a4c34451/classes.dex" />
+    </item>
+    <item
+        jar="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="34762013d39dbe6c656050589c44e8b61b9a2c5d">
+        <dex dex="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.4.0_c49cefcc57fbf9af40bb750c64055911156b9237/classes.dex" />
+    </item>
+    <item
+        jar="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="24.0.2"
+        sha1="4b630471536351be7c3c3100735c75b7ad2cbd84">
+        <dex dex="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.4.0_1a68e093426387942c800e4e59a87efcde1db75e/classes.dex" />
+    </item>
+
+</items>
