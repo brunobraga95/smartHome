@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.example.brunobraga.smarthome"
         minSdkVersion 15
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -27,5 +27,6 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'com.google.firebase:firebase-database:9.4.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
 }
 apply plugin: 'com.google.gms.google-services'
