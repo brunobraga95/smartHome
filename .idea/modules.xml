@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/facebookandroidsdk4150aar_FILES/facebookandroidsdk4150aar_FILES.iml" filepath="$PROJECT_DIR$/facebookandroidsdk4150aar_FILES/facebookandroidsdk4150aar_FILES.iml" />
       <module fileurl="file://$PROJECT_DIR$/smartHome.iml" filepath="$PROJECT_DIR$/smartHome.iml" />
     </modules>
   </component>

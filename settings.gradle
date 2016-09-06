@@ -1,1 +1,2 @@
 include ':app'
+include ':facebookandroidsdk4150aar_FILES'
