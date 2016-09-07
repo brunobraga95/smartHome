@@ -1,4 +1,4 @@
-package com.example.brunobraga.smarthome;
+package com.example.brunobraga.smarthome.utils;
 
 /**
  * Created by brunobraga on 06/09/16.
