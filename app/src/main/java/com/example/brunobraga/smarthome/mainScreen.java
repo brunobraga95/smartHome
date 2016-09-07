@@ -1,10 +1,12 @@
 package com.example.brunobraga.smarthome;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.brunobraga.smarthome.popUps.SetUpNickNamePopUp;
 import com.example.brunobraga.smarthome.utils.User;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,7 +64,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
                             TextView userName = (TextView)findViewById(R.id.userName);
                             userName.setText(user.username);
-                            // ...
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainScreen.this);
+                            final EditText et = new EditText(mainScreen.this);
+
+                            SetUpNickNamePopUp setUpNickNamePopUp = new SetUpNickNamePopUp(alertDialogBuilder,et);
+                            setUpNickNamePopUp.setUpNickNameAlertDialog.show();
                         }
 
                         @Override

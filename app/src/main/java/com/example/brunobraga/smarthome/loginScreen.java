@@ -201,38 +201,5 @@ public class loginScreen extends BaseActivity implements
     public void onClick(View view) {
 
     }
-    // [END auth_with_facebook]
-    /*
-    public void signOut() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
 
-        updateUI(null);
-    }
-
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText("Sign out");
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.button_facebook_signout) {
-            signOut();
-        }
-    }
-    */
 }
