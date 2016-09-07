@@ -1,6 +1,7 @@
 package com.example.brunobraga.smarthome;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,11 +26,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.net.URL;
 
 public class mainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    ImageView profilePicture;
     private static final String TAG_QUERY = "QUERY DEBBUG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +54,20 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Get user value
                             User user = dataSnapshot.getValue(User.class);
-                            System.out.println(user);
+                            Uri profilePictureUri = Uri.parse(user.photoUrl);
+                            profilePicture = (ImageView)findViewById(R.id.profilePicture);
+                            System.out.println(profilePictureUri);
+                            loadImageFromUrl(profilePictureUri);
+
+                            TextView userName = (TextView)findViewById(R.id.userName);
+                            userName.setText(user.username);
                             // ...
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             Log.w(TAG_QUERY, "getUser:onCancelled", databaseError.toException());
-                            // ...
+                            // ....
                         }
                     });
         } else {
@@ -89,6 +102,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
+    private void loadImageFromUrl(Uri url){
+        Picasso.with(this).load(url).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -117,17 +134,15 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.navCreateGroup) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.navInviteFriend) {
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.navSettings) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.navLogOut) {
             mAuth.signOut();
             LoginManager.getInstance().logOut();
             Intent intent = new Intent(mainScreen.this,loginScreen.class);
