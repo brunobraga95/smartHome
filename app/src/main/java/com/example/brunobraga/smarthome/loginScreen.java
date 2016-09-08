@@ -81,7 +81,7 @@ public class loginScreen extends BaseActivity implements
                                     // Get user value
                                     if(dataSnapshot.getValue() == null){
                                         Log.d(TAG,"New User");
-                                        mDatabase.child("usersUid").child(user.getUid()+"/userInfo").setValue(new User(user.getDisplayName(),user.getEmail(),""+user.getPhotoUrl(),user.getUid()));
+                                        mDatabase.child("usersUid").child(user.getUid()+"/userInfo").setValue(new User(user.getDisplayName(),user.getEmail(),""+user.getPhotoUrl(),user.getUid(),null));
 
                                     }
                                     else{

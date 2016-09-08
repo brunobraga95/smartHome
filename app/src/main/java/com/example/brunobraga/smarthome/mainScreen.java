@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,8 +41,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    private ImageView profilePicture;
     private static final String TAG_QUERY = "QUERY DEBBUG";
+    private FirebaseUser userRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,27 +51,18 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            System.out.println("User uid "+user.getUid());
+        userRef = FirebaseAuth.getInstance().getCurrentUser();
+        if (userRef != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
-            mDatabase.child("usersUid").child(user.getUid()+"/userInfo").addListenerForSingleValueEvent(
+            mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo").addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Get user value
                             final User user = dataSnapshot.getValue(User.class);
-                            System.out.println("test:"+user.photoUrl);
-                            Uri profilePictureUri = Uri.parse(user.photoUrl);
-                            System.out.println(profilePictureUri);
-                            profilePicture = (ImageView)findViewById(R.id.profilePicture);;
-                            //Picasso.with(mainScreen.this).load(profilePictureUri).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
-                            if(user.userNickName == null){
-                                TextView userName = (TextView)findViewById(R.id.userName);
-                                //userName.setText(user.username);
+                            if(user.nickName == null){
                                 setUpNickNamePopUp(user);
                             }
-
                         }
 
                         @Override
@@ -79,6 +71,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                             // ....
                         }
                     });
+
+
         } else {
             System.out.println("tem user logado nao");
         }
@@ -99,6 +93,16 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_screen);
+
+        TextView userName = (TextView) headerView.findViewById(R.id.userName);
+        ImageView profilePicture = (ImageView) headerView.findViewById(R.id.profilePicture);
+
+        userName.setText(userRef.getDisplayName());
+
+        Uri profilePictureUri = Uri.parse(String.valueOf(userRef.getPhotoUrl()));
+        Picasso.with(mainScreen.this).load(profilePictureUri).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
     }
 
     @Override
@@ -122,16 +126,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-
-                Log.d("On click",et.getText().toString());
-                /*
-                System.out.println(et.getText().toString());
-                HashMap<String, Object> result = new HashMap<>();
-                result.put("nickName", et.getText().toString());
-                Map<String, Object> childUpdates = new HashMap<>();
-                //childUpdates.put("/usersUid/"+user.userUid+"/userInfo", result);;
-                mDatabase.child("/usersUid/"+user.userUid+"/userInfo/nickName").setValue(et.getText().toString());
-                */
                 DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
                 Map<String, Object> nickname = new HashMap<String, Object>();
                 nickname.put("nickName",et.getText().toString());
