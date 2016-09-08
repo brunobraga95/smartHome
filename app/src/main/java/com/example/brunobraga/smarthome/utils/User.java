@@ -1,21 +1,23 @@
 package com.example.brunobraga.smarthome.utils;
 
 import android.net.Uri;
+import android.text.Editable;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by brunobraga on 06/09/16.
  */
 @IgnoreExtraProperties
 public class User{
-
     public String username;
     public String email;
     public  String photoUrl;
     public String userUid;
+    public String userNickName;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -26,6 +28,11 @@ public class User{
         this.email = email;
         this.photoUrl = photoUrl;
         this.userUid = userUid;
+        this.userNickName = null;
+    }
+
+    public void setUpUserNickName(String nickName){
+        this.userNickName = nickName;
     }
 
 }

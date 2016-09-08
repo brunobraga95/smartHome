@@ -85,7 +85,7 @@ public class loginScreen extends BaseActivity implements
 
                                     }
                                     else{
-                                        System.out.println(dataSnapshot.getValue());
+                                        Log.d(TAG,"Old User");
                                     }
                                     Intent intent = new Intent(loginScreen.this,mainScreen.class);
                                     startActivity(intent);

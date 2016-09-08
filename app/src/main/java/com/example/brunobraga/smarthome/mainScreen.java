@@ -33,11 +33,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class mainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    ImageView profilePicture;
+    private ImageView profilePicture;
     private static final String TAG_QUERY = "QUERY DEBBUG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +59,18 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Get user value
-                            User user = dataSnapshot.getValue(User.class);
+                            final User user = dataSnapshot.getValue(User.class);
+                            System.out.println("test:"+user.photoUrl);
                             Uri profilePictureUri = Uri.parse(user.photoUrl);
-                            profilePicture = (ImageView)findViewById(R.id.profilePicture);
                             System.out.println(profilePictureUri);
-                            loadImageFromUrl(profilePictureUri);
+                            profilePicture = (ImageView)findViewById(R.id.profilePicture);;
+                            //Picasso.with(mainScreen.this).load(profilePictureUri).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+                            if(user.userNickName == null){
+                                TextView userName = (TextView)findViewById(R.id.userName);
+                                //userName.setText(user.username);
+                                setUpNickNamePopUp(user);
+                            }
 
-                            TextView userName = (TextView)findViewById(R.id.userName);
-                            userName.setText(user.username);
-                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainScreen.this);
-                            final EditText et = new EditText(mainScreen.this);
-
-                            SetUpNickNamePopUp setUpNickNamePopUp = new SetUpNickNamePopUp(alertDialogBuilder,et);
-                            setUpNickNamePopUp.setUpNickNameAlertDialog.show();
                         }
 
                         @Override
@@ -109,8 +111,36 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
-    private void loadImageFromUrl(Uri url){
-        Picasso.with(this).load(url).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+    public void setUpNickNamePopUp(final User user){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainScreen.this);
+        final EditText et = new EditText(mainScreen.this);
+        alertDialogBuilder.setTitle("Welcome "+user.username);
+        alertDialogBuilder.setMessage("Please Choose a Nick name");
+        alertDialogBuilder.setView(et);
+        alertDialogBuilder.create();
+
+        alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+
+                Log.d("On click",et.getText().toString());
+                /*
+                System.out.println(et.getText().toString());
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("nickName", et.getText().toString());
+                Map<String, Object> childUpdates = new HashMap<>();
+                //childUpdates.put("/usersUid/"+user.userUid+"/userInfo", result);;
+                mDatabase.child("/usersUid/"+user.userUid+"/userInfo/nickName").setValue(et.getText().toString());
+                */
+                DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
+                Map<String, Object> nickname = new HashMap<String, Object>();
+                nickname.put("nickName",et.getText().toString());
+                ref.updateChildren(nickname);
+            }
+
+        });
+
+        alertDialogBuilder.show();
     }
 
     @Override
