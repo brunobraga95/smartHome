@@ -18,8 +18,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.brunobraga.smarthome.popUps.SetUpNickNamePopUp;
@@ -43,6 +46,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private FirebaseAuth mAuth;
     private static final String TAG_QUERY = "QUERY DEBBUG";
     private FirebaseUser userRef;
+    private LinearLayout oldLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,8 +54,12 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        oldLayout = (LinearLayout)findViewById(R.id.app_bar_main_screen_layout);
+
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
+
+
         if (userRef != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo").addListenerForSingleValueEvent(
@@ -124,7 +132,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         alertDialogBuilder.create();
 
         alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int id) {
                 DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
                 Map<String, Object> nickname = new HashMap<String, Object>();
@@ -133,7 +140,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             }
 
         });
-
         alertDialogBuilder.show();
     }
 
@@ -166,7 +172,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         int id = item.getItemId();
 
         if (id == R.id.navCreateGroup) {
-            // Handle the camera action
+            LinearLayout v  = (LinearLayout) findViewById(R.id.create_group_layout);
+            oldLayout.setVisibility(View.INVISIBLE);
+            oldLayout = v;
+            oldLayout.setVisibility(View.VISIBLE);
         } else if (id == R.id.navInviteFriend) {
 
         } else if (id == R.id.nav_manage) {
