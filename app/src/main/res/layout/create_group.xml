@@ -7,17 +7,8 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.brunobraga.smarthome.mainScreen">
 
-<!--
-    <EditText
-        android:layout_width="355dp"
-        android:layout_height="30dp"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_vertical" />
--->
     <LinearLayout
+        android:id="@+id/createGroup"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -51,11 +42,15 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="#a6aff7" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal" >
             <ImageButton
                 android:layout_width="wrap_content"
                 android:src="@drawable/ic_person_add_black_24dp"
@@ -69,15 +64,8 @@
                 android:text="ADD Friends to this group"
                 android:id="@+id/addFriendsButtonTextView" />
         </LinearLayout>
+    </LinearLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Bruno Braga"
-            android:id="@+id/usersNameOnAddFriends"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
     </LinearLayout>
 
 

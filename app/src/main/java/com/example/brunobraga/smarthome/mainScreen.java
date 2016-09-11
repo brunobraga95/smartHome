@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.brunobraga.smarthome.popUps.SetUpNickNamePopUp;
 import com.example.brunobraga.smarthome.utils.User;
+import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,6 +57,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private FirebaseUser userRef;
     private LinearLayout oldLayout;
     private ListView addFriendslistView = null;
+    private usefull useFull = new usefull();
+    private ViewGroup cancelFriendsViewGroup;
+    private ListView cancelFriendslistView;
+    private ArrayAdapter<String> adapterCancelFriends;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,10 +70,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldLayout = (LinearLayout)findViewById(R.id.app_bar_main_screen_layout);
-
+        cancelFriendsViewGroup = (ViewGroup)findViewById(R.id.createGroup);
+        cancelFriendslistView = new ListView(mainScreen.this);
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
-
 
         if (userRef != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -123,7 +129,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         addFriendslistView=new ListView(mainScreen.this);
         String[] items={"Bruno","Wellington","Gabriel","Victor"};
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,items);
+        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,items);
         addFriendslistView.setAdapter(adapter);
 
         addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,6 +144,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 if(color == 0 || color == -1){
                     txt.setBackgroundColor(Color.parseColor("#E0E0E0"));
                 }else txt.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                useFull.updateSelectedFriends(txt.getText().toString());
                 System.out.println(color);
                 Toast.makeText(mainScreen.this,txt.getText().toString(),Toast.LENGTH_LONG).show();
             }
@@ -151,7 +158,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 AlertDialog.Builder(mainScreen.this);
                 addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        //for(int i=0;i<useFull.selectedFriends.size();i++)names[i] = (String) useFull.selectedFriends.get(i);
+                        adapterCancelFriends =new ArrayAdapter<String>(mainScreen.this,R.layout.cancel_friends_list, R.id.usersNameOnAddFriends,useFull.selectedFriends);
+                        cancelFriendslistView.setAdapter(adapterCancelFriends);
+                        cancelFriendsViewGroup.addView(cancelFriendslistView);
                     }
 
                 });
@@ -161,6 +171,20 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             }
 
 
+        });
+
+        //BUG ON THIS LISTENER, THIS LISTENER IS SUPPOSED TO REMOVE FRIENDS FROM THE ADDFRIENDSTOGROUP LIST, ALTHOUGH IT IS REMOVING, IT WONT ACTUALLY DELETE THE VIEWS
+        cancelFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println(i);
+                ViewGroup vg=(ViewGroup)view;
+                TextView txt=(TextView)vg.findViewById(R.id.usersNameOnAddFriends);
+                System.out.println(txt.getText().toString());
+                cancelFriendslistView.removeViewInLayout(view);
+                cancelFriendslistView.setDivider(null);
+                cancelFriendslistView.setDividerHeight(0);
+            }
         });
 
     }
