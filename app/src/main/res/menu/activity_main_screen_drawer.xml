@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/navOverAll"
+            android:icon="@drawable/ic_reorder_black_24dp"
+            android:title="Overall" />
+        <item
             android:id="@+id/navCreateGroup"
             android:icon="@drawable/ic_group_add_black_24dp"
             android:title="Create a Group" />
-        <item
-            android:id="@+id/navInviteFriend"
-            android:icon="@drawable/ic_person_add_black_24dp"
-            android:title="Invite Friend" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

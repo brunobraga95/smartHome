@@ -2,6 +2,9 @@ package com.example.brunobraga.smarthome;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,10 +23,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.brunobraga.smarthome.popUps.SetUpNickNamePopUp;
 import com.example.brunobraga.smarthome.utils.User;
@@ -47,6 +55,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private static final String TAG_QUERY = "QUERY DEBBUG";
     private FirebaseUser userRef;
     private LinearLayout oldLayout;
+    private ListView addFriendslistView = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -111,6 +120,49 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         Uri profilePictureUri = Uri.parse(String.valueOf(userRef.getPhotoUrl()));
         Picasso.with(mainScreen.this).load(profilePictureUri).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+
+        addFriendslistView=new ListView(mainScreen.this);
+        String[] items={"Bruno","Wellington","Gabriel","Victor"};
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,items);
+        addFriendslistView.setAdapter(adapter);
+
+        addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ViewGroup vg=(ViewGroup)view;
+                TextView txt=(TextView)vg.findViewById(R.id.txtitem);
+                int color = Color.TRANSPARENT;
+                Drawable background = txt.getBackground();
+                if(background instanceof ColorDrawable)
+                    color = ((ColorDrawable) background).getColor();
+                if(color == 0 || color == -1){
+                    txt.setBackgroundColor(Color.parseColor("#E0E0E0"));
+                }else txt.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                System.out.println(color);
+                Toast.makeText(mainScreen.this,txt.getText().toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        ImageButton addFriendsButton = (ImageButton)findViewById(R.id.addFriendsButton);
+        addFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder addFriendsPopUp=new
+                AlertDialog.Builder(mainScreen.this);
+                addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+
+                });
+                addFriendsPopUp.setView(addFriendslistView);
+                AlertDialog addFriendsDialog= addFriendsPopUp.create();
+                addFriendsDialog.show();
+            }
+
+
+        });
+
     }
 
     @Override
@@ -171,13 +223,16 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.navCreateGroup) {
+        if(id == R.id.navOverAll){
+            LinearLayout v  = (LinearLayout) findViewById(R.id.app_bar_main_screen_layout);
+            oldLayout.setVisibility(View.INVISIBLE);
+            oldLayout = v;
+            oldLayout.setVisibility(View.VISIBLE);
+        }else if (id == R.id.navCreateGroup) {
             LinearLayout v  = (LinearLayout) findViewById(R.id.create_group_layout);
             oldLayout.setVisibility(View.INVISIBLE);
             oldLayout = v;
             oldLayout.setVisibility(View.VISIBLE);
-        } else if (id == R.id.navInviteFriend) {
-
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.navSettings) {
