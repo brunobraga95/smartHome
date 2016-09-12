@@ -177,11 +177,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         cancelFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println(i);
                 ViewGroup vg=(ViewGroup)view;
                 TextView txt=(TextView)vg.findViewById(R.id.usersNameOnAddFriends);
                 System.out.println(txt.getText().toString());
-                cancelFriendslistView.removeViewInLayout(view);
+                adapterCancelFriends.remove(txt.getText().toString());
+                adapterCancelFriends.notifyDataSetChanged();
                 cancelFriendslistView.setDivider(null);
                 cancelFriendslistView.setDividerHeight(0);
             }
