@@ -8,20 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!--
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#FF0000"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </android.support.design.widget.AppBarLayout>
--->
-
     <LinearLayout
         android:id="@+id/action_bar_layout"
         android:layout_width="match_parent"

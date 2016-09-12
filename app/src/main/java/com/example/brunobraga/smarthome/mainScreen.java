@@ -22,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -33,7 +32,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.brunobraga.smarthome.popUps.SetUpNickNamePopUp;
 import com.example.brunobraga.smarthome.utils.User;
 import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
@@ -99,11 +97,15 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         } else {
             System.out.println("tem user logado nao");
         }
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabCreateGroup = (FloatingActionButton) findViewById(R.id.fabCreateGroup);
+        fabCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                for(int i=0;i<useFull.selectedFriends.size();i++){
+                    System.out.println(useFull.selectedFriends.get(i));
+                }
+
+                Snackbar.make(view, "Group Created", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -113,7 +115,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -179,7 +181,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ViewGroup vg=(ViewGroup)view;
                 TextView txt=(TextView)vg.findViewById(R.id.usersNameOnAddFriends);
-                System.out.println(txt.getText().toString());
+                useFull.selectedFriends.remove(txt.getText().toString());
                 adapterCancelFriends.remove(txt.getText().toString());
                 adapterCancelFriends.notifyDataSetChanged();
                 cancelFriendslistView.setDivider(null);
