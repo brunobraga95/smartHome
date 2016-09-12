@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class usefull {
     public ArrayList selectedFriends = new ArrayList();
+    public int cancelFriendsListViewPosition = -1;
+
     void useful(){
 
     }

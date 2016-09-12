@@ -125,7 +125,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         userName.setText(userRef.getDisplayName());
 
         Uri profilePictureUri = Uri.parse(String.valueOf(userRef.getPhotoUrl()));
-        Picasso.with(mainScreen.this).load(profilePictureUri).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+        Picasso.with(mainScreen.this).load(profilePictureUri).transform(new CircleTransform()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
 
         addFriendslistView=new ListView(mainScreen.this);
         String[] items={"Bruno","Wellington","Gabriel","Victor"};

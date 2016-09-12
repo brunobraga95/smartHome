@@ -10,14 +10,21 @@
             android:id="@+id/navCreateGroup"
             android:icon="@drawable/ic_group_add_black_24dp"
             android:title="Create a Group" />
+
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/navContact"
+            android:icon="@android:drawable/sym_action_email"
+            android:title="Contact" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Others">
+
         <menu>
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools" />
             <item
                 android:id="@+id/navSettings"
                 android:icon="@drawable/ic_settings_black_24dp"

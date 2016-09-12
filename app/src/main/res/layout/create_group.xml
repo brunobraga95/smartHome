@@ -66,15 +66,25 @@
         </LinearLayout>
     </LinearLayout>
 
+
+
     </LinearLayout>
 
+    <TextView
+        android:layout_width="300dp"
+        android:layout_marginTop="300dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="In order to speed up the process users will be automatically added, please make sure to only invite friends"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_dialog_email"
+        android:src="@android:drawable/ic_menu_send"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/editText"
         android:layout_alignEnd="@+id/editText"
