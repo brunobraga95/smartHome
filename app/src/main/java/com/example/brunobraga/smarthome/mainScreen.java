@@ -221,6 +221,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 Map<String, Object> nickname = new HashMap<String, Object>();
                 nickname.put("nickName",et.getText().toString());
                 ref.updateChildren(nickname);
+
+                Map<String, Object> usersNicknames = new HashMap<String, Object>();
+                usersNicknames.put(et.getText().toString(),user.userUid);
+                DatabaseReference refNickNames = mDatabase.child("nickNames");
+                refNickNames.updateChildren(usersNicknames);
             }
 
         });
