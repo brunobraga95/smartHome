@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.brunobraga.smarthome.utils.CreateGroup;
 import com.example.brunobraga.smarthome.utils.User;
 import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
@@ -44,6 +46,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +75,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         cancelFriendslistView = new ListView(mainScreen.this);
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
-
         if (userRef != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo").addListenerForSingleValueEvent(
@@ -101,9 +103,12 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         fabCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList friendsToAddOnGroup = new ArrayList();
                 for(int i=0;i<useFull.selectedFriends.size();i++){
-                    System.out.println(useFull.selectedFriends.get(i));
+                    friendsToAddOnGroup.add(useFull.selectedFriends.get(i));
                 }
+                CreateGroup createGroup = new CreateGroup("bonde dos solteiro",friendsToAddOnGroup);
+                mDatabase.child("groups").child("/bondeDosSolteiro").setValue(createGroup);
 
                 Snackbar.make(view, "Group Created", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -170,6 +175,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 addFriendsPopUp.setView(addFriendslistView);
                 AlertDialog addFriendsDialog= addFriendsPopUp.create();
                 addFriendsDialog.show();
+
             }
 
 
@@ -215,6 +221,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 Map<String, Object> nickname = new HashMap<String, Object>();
                 nickname.put("nickName",et.getText().toString());
                 ref.updateChildren(nickname);
+
+                Map<String, Object> usersNicknames = new HashMap<String, Object>();
+                usersNicknames.put(et.getText().toString(),user.userUid);
+                DatabaseReference refNickNames = mDatabase.child("nickNames");
+                refNickNames.updateChildren(usersNicknames);
             }
 
         });
@@ -274,4 +285,5 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
