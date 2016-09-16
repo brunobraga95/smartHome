@@ -3,6 +3,7 @@ package com.example.brunobraga.smarthome;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -62,6 +64,9 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private ViewGroup cancelFriendsViewGroup;
     private ListView cancelFriendslistView;
     private ArrayAdapter<String> adapterCancelFriends;
+    private View footerView;
+    private ArrayAdapter<String> adapter;
+    private ArrayList<String> addFriendsToListArray = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         cancelFriendslistView = new ListView(mainScreen.this);
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
+        Button addFriendsToList = (Button)findViewById(R.id.addFriendsToList);
+
         if (userRef != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo").addListenerForSingleValueEvent(
@@ -135,50 +142,28 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Picasso.with(mainScreen.this).load(profilePictureUri).transform(new CircleTransform()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
 
         addFriendslistView=new ListView(mainScreen.this);
-        String[] items={"Bruno","Wellington","Gabriel","Victor","Gabriel","Victor"};
-        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,items);
+        adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,addFriendsToListArray);
         addFriendslistView.setAdapter(adapter);
-        View footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
+        footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
         addFriendslistView.addFooterView(footerView);
 
         addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ViewGroup vg=(ViewGroup)view;
-                TextView txt=(TextView)vg.findViewById(R.id.txtitem);
-                int color = Color.TRANSPARENT;
+                TextView txt = (TextView)vg.findViewById(R.id.txtitem);
+                ImageView image = (ImageView)vg.findViewById(R.id.addFriendsToListImageView);
                 Drawable background = txt.getBackground();
-                if(background instanceof ColorDrawable)
-                    color = ((ColorDrawable) background).getColor();
-                if(color == 0 || color == -1){
-                    txt.setBackgroundColor(Color.parseColor("#E0E0E0"));
-                }else txt.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                if(image.getDrawable() == null){
+                    Resources res = getResources(); // need this to fetch the drawable
+                    Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
+                    image.setImageDrawable(draw);
+                }else {
+                    image.setImageDrawable(null);
+                }
                 useFull.updateSelectedFriends(txt.getText().toString());
-                System.out.println(color);
                 Toast.makeText(mainScreen.this,txt.getText().toString(),Toast.LENGTH_LONG).show();
             }
-        });
-
-        ImageButton addFriendsButton = (ImageButton)findViewById(R.id.addFriendsButton);
-        addFriendsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder addFriendsPopUp=new
-                AlertDialog.Builder(mainScreen.this);
-                addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        adapterCancelFriends =new ArrayAdapter<String>(mainScreen.this,R.layout.cancel_friends_list, R.id.usersNameOnAddFriends,useFull.selectedFriends);
-                        cancelFriendslistView.setAdapter(adapterCancelFriends);;
-                        cancelFriendsViewGroup.addView(cancelFriendslistView);
-                    }
-
-                });
-                addFriendsPopUp.setView(addFriendslistView);
-                AlertDialog addFriendsDialog= addFriendsPopUp.create();
-                addFriendsDialog.show();
-
-            }
-
 
         });
 
@@ -285,6 +270,40 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void onClick(View view) {
+        System.out.println("entrou onclick");
+        switch (view.getId()){
+            case R.id.addFriendsToList:
+            {
+                EditText friendNameEditText = (EditText)footerView.findViewById(R.id.editTextAddFriendsToList);
+                String friendName = friendNameEditText.getText().toString();
+                //REGEX TO TEST NICKNAME;
+                Toast.makeText(mainScreen.this,friendName,Toast.LENGTH_LONG).show();
+                addFriendsToListArray.add(friendName);
+                adapter.notifyDataSetChanged();
+                break;
+            }
+            case R.id.addFriendsButton:{
+                AlertDialog.Builder addFriendsPopUp=new AlertDialog.Builder(mainScreen.this);
+                addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        adapterCancelFriends =new ArrayAdapter<String>(mainScreen.this,R.layout.cancel_friends_list, R.id.usersNameOnAddFriends,useFull.selectedFriends);
+                        cancelFriendslistView.setAdapter(adapterCancelFriends);;
+                        cancelFriendsViewGroup.addView(cancelFriendslistView);
+                    }
+
+                });
+                addFriendsPopUp.setView(addFriendslistView);
+                AlertDialog addFriendsDialog= addFriendsPopUp.create();
+                addFriendsDialog.show();
+                break;
+            }
+            default:{
+                break;
+            }
+
+        }
     }
 
 }
