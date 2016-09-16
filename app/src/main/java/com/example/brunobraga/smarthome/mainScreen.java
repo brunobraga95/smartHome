@@ -1,12 +1,12 @@
 package com.example.brunobraga.smarthome;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -135,9 +135,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Picasso.with(mainScreen.this).load(profilePictureUri).transform(new CircleTransform()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
 
         addFriendslistView=new ListView(mainScreen.this);
-        String[] items={"Bruno","Wellington","Gabriel","Victor"};
+        String[] items={"Bruno","Wellington","Gabriel","Victor","Gabriel","Victor"};
         final ArrayAdapter<String> adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,items);
         addFriendslistView.setAdapter(adapter);
+        View footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
+        addFriendslistView.addFooterView(footerView);
 
         addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -165,9 +167,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 AlertDialog.Builder(mainScreen.this);
                 addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //for(int i=0;i<useFull.selectedFriends.size();i++)names[i] = (String) useFull.selectedFriends.get(i);
                         adapterCancelFriends =new ArrayAdapter<String>(mainScreen.this,R.layout.cancel_friends_list, R.id.usersNameOnAddFriends,useFull.selectedFriends);
-                        cancelFriendslistView.setAdapter(adapterCancelFriends);
+                        cancelFriendslistView.setAdapter(adapterCancelFriends);;
                         cancelFriendsViewGroup.addView(cancelFriendslistView);
                     }
 
@@ -287,3 +288,4 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     }
 
 }
+

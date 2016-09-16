@@ -12,6 +12,11 @@
             android:title="Create a Group" />
 
         <item
+            android:id="@+id/navFriendRequests"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="Friend Requests" />
+
+        <item
             android:id="@+id/navContact"
             android:icon="@android:drawable/sym_action_email"
             android:title="Contact" />
