@@ -18,11 +18,12 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Enter Group Name"
+            android:textColor="#FFFFFF"
             android:id="@+id/grouNameTextView"
             android:layout_marginTop="55dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="#a6aff7" />
+            android:background="#244C87" />
 
         <EditText
             android:maxLines="1"
@@ -40,9 +41,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Add people to this group"
             android:id="@+id/addFriendsTextView"
+            android:textColor="#FFFFFF"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="#a6aff7" />
+            android:background="#244C87" />
 
         <LinearLayout
             android:layout_width="fill_parent"

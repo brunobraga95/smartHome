@@ -10,9 +10,9 @@
         android:gradientRadius="100"
         android:centerX="35%"
         android:centerY="50%"
-        android:centerColor="#ADD8E6"
-        android:startColor="#87CEFA"
-        android:endColor="#00BFFF"
+        android:centerColor="#FFFFFF"
+        android:startColor="#FFFFFF"
+        android:endColor="#FFFFFF"
         android:type="radial"
         />
     <padding
@@ -23,6 +23,6 @@
         />
     <stroke
         android:width="3dp"
-        android:color="#244C87"
+        android:color="#FFFFFF"
         />
 </shape>

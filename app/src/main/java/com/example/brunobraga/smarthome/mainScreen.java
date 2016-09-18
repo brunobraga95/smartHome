@@ -24,14 +24,13 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import com.example.brunobraga.smarthome.utils.CreateGroup;
 import com.example.brunobraga.smarthome.utils.User;
 import com.example.brunobraga.smarthome.utils.usefull;
@@ -244,7 +243,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             public void onClick(DialogInterface dialog, int id) {
                 DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
                 String userNickname = et.getText().toString();
-                boolean nickNameMatcher = Pattern.matches("^[^0-9 /t][^@# ]+$", userNickname);
+                boolean nickNameMatcher = Pattern.matches("^[^0-9 ][^@# ]+$", userNickname);
                 if(nickNameMatcher) {
                     Map<String, Object> nickname = new HashMap<String, Object>();
                     nickname.put("nickName", userNickname);
@@ -324,7 +323,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 EditText friendNameEditText = (EditText)footerView.findViewById(R.id.editTextAddFriendsToList);
                 String friendName = friendNameEditText.getText().toString();
                 //REGEX TO TEST NICKNAME;
-                boolean nickNameMatcher = Pattern.matches("^[^0-9 /t][^@# ]+$", friendName);
+                boolean nickNameMatcher = Pattern.matches("^[^0-9 ][^@# ]+$", friendName);
                 if(nickNameMatcher){
                     addFriendsToListArray.add(friendName);
                     adapter.notifyDataSetChanged();
@@ -350,9 +349,9 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.toggleButtonTasks:{
-                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
-                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
-                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+                Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
+                Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
+                Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
 
                 Resources res = getResources();
                 Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
@@ -361,13 +360,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 tasksTougleButton.setBackgroundDrawable(drawSelected);
                 groupsTougleButton.setBackgroundDrawable(drawUnselected);
                 recentTougleButton.setBackgroundDrawable(drawUnselected);
+
                 break;
             }
 
             case R.id.toggleButtonGroups:{
-                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
-                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
-                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+                Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
+                Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
+                Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
 
                 Resources res = getResources();
                 Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
@@ -380,9 +380,9 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             }
 
             case R.id.toggleButtonRecent:{
-                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
-                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
-                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+                Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
+                Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
+                Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
 
                 Resources res = getResources();
                 Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);

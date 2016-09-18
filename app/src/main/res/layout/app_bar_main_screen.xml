@@ -3,32 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.brunobraga.smarthome.mainScreen">
-    <!--
-    <TabHost
-        android:id="@android:id/tabhost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|top">
-                </TabWidget>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
--->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -37,47 +12,34 @@
         android:layout_marginTop="55dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
-    <!--
+
         <Button
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Tasks"
-            android:background="@drawable/tab_host_button_shape"
-            android:id="@+id/button" /> -->
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="New ToggleButton"
             android:id="@+id/toggleButtonTasks"
             android:onClick="onClick"
-            android:background="@drawable/tab_host_button_shape_unselected"
-            android:textOn="Tasks"
-            android:textOff="Tasks"
+            android:background="@drawable/tab_host_button_shape_selected"
+
              />
 
-        <ToggleButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="New ToggleButton"
+            android:text="Groups"
             android:id="@+id/toggleButtonGroups"
-            android:textOn="Groups"
-            android:textOff="Groups"
             android:onClick="onClick"
             android:background="@drawable/tab_host_button_shape_unselected"
             />
 
-        <ToggleButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="New ToggleButton"
+            android:text="Recent"
             android:id="@+id/toggleButtonRecent"
-            android:textOn="Recent"
-            android:textOff="Recent"
             android:onClick="onClick"
             android:background="@drawable/tab_host_button_shape_unselected"
             />
