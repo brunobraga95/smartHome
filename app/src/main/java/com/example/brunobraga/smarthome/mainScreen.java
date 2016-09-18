@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.brunobraga.smarthome.utils.CreateGroup;
 import com.example.brunobraga.smarthome.utils.User;
@@ -346,6 +347,50 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 addFriendsPopUp.setView(addFriendslistView);
                 AlertDialog addFriendsDialog= addFriendsPopUp.create();
                 addFriendsDialog.show();
+                break;
+            }
+            case R.id.toggleButtonTasks:{
+                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
+                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
+                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+
+                Resources res = getResources();
+                Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
+                Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+                tasksTougleButton.setBackgroundDrawable(drawSelected);
+                groupsTougleButton.setBackgroundDrawable(drawUnselected);
+                recentTougleButton.setBackgroundDrawable(drawUnselected);
+                break;
+            }
+
+            case R.id.toggleButtonGroups:{
+                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
+                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
+                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+
+                Resources res = getResources();
+                Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
+                Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+                tasksTougleButton.setBackgroundDrawable(drawUnselected);
+                groupsTougleButton.setBackgroundDrawable(drawSelected);
+                recentTougleButton.setBackgroundDrawable(drawUnselected);
+                break;
+            }
+
+            case R.id.toggleButtonRecent:{
+                ToggleButton tasksTougleButton = (ToggleButton)findViewById(R.id.toggleButtonTasks);
+                ToggleButton groupsTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonGroups);
+                ToggleButton recentTougleButton  = (ToggleButton)findViewById(R.id.toggleButtonRecent);
+
+                Resources res = getResources();
+                Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
+                Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+                tasksTougleButton.setBackgroundDrawable(drawUnselected);
+                groupsTougleButton.setBackgroundDrawable(drawUnselected);
+                recentTougleButton.setBackgroundDrawable(drawSelected);
                 break;
             }
             default:{

@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <LinearLayout
         android:id="@+id/action_bar_layout"
         android:layout_width="match_parent"
