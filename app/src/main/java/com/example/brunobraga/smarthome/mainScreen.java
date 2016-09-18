@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,9 +24,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -45,6 +41,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -59,6 +57,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private static final String TAG_QUERY = "QUERY DEBBUG";
     private FirebaseUser userRef;
     private LinearLayout oldLayout;
+    private User user;
     private ListView addFriendslistView = null;
     private usefull useFull = new usefull();
     private ViewGroup cancelFriendsViewGroup;
@@ -80,16 +79,31 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         cancelFriendslistView = new ListView(mainScreen.this);
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
-        Button addFriendsToList = (Button)findViewById(R.id.addFriendsToList);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_screen);
 
         if (userRef != null) {
+            System.out.println(userRef);
+            TextView userName = (TextView) headerView.findViewById(R.id.userName);
+            ImageView profilePicture = (ImageView) headerView.findViewById(R.id.profilePicture);
+            userName.setText(userRef.getDisplayName());
+            Uri profilePictureUri = Uri.parse(String.valueOf(userRef.getPhotoUrl()));
+            Picasso.with(mainScreen.this).load(profilePictureUri).transform(new CircleTransform()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
+
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo").addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Get user value
-                            final User user = dataSnapshot.getValue(User.class);
+                            user = dataSnapshot.getValue(User.class);
                             if(user.nickName == null){
                                 setUpNickNamePopUp(user);
                             }
@@ -107,39 +121,53 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             System.out.println("tem user logado nao");
         }
         FloatingActionButton fabCreateGroup = (FloatingActionButton) findViewById(R.id.fabCreateGroup);
+
         fabCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 ArrayList friendsToAddOnGroup = new ArrayList();
                 for(int i=0;i<useFull.selectedFriends.size();i++){
                     friendsToAddOnGroup.add(useFull.selectedFriends.get(i));
-                }
-                CreateGroup createGroup = new CreateGroup("bonde dos solteiro",friendsToAddOnGroup);
-                mDatabase.child("groups").child("/bondeDosSolteiro").setValue(createGroup);
+                 }
 
-                Snackbar.make(view, "Group Created", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                EditText groupNameEditText = (EditText)cancelFriendsViewGroup.findViewById(R.id.groupNameEditText);
+                final String groupName = groupNameEditText.getText().toString();
+                CreateGroup createGroup = new CreateGroup(groupName,friendsToAddOnGroup);
+                mDatabase.child("groups").child("/"+groupName).setValue(createGroup);
+
+
+                DatabaseReference postRef = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
+                postRef.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        User u = mutableData.getValue(User.class);
+
+                        if (u.groups == null) {
+                            u.groups = groupName;
+                        } else {
+                            u.groups = u.groups + "/" + groupName;
+                        }
+
+                        mutableData.setValue(u);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b,
+                                           DataSnapshot dataSnapshot) {
+                        // Transaction completed
+                        if(databaseError == null){
+                            Snackbar.make(view, "Group Created", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                        else Log.d("ERROR FIREBASE TRANSACTION", "postTransaction:onComplete:" + databaseError);
+                    }
+                });
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_screen);
 
-        TextView userName = (TextView) headerView.findViewById(R.id.userName);
-        ImageView profilePicture = (ImageView) headerView.findViewById(R.id.profilePicture);
-
-        userName.setText(userRef.getDisplayName());
-
-        Uri profilePictureUri = Uri.parse(String.valueOf(userRef.getPhotoUrl()));
-        Picasso.with(mainScreen.this).load(profilePictureUri).transform(new CircleTransform()).placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).into(profilePicture);
 
         addFriendslistView=new ListView(mainScreen.this);
         adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,addFriendsToListArray);
@@ -272,7 +300,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         return true;
     }
     public void onClick(View view) {
-        System.out.println("entrou onclick");
         switch (view.getId()){
             case R.id.addFriendsToList:
             {
@@ -282,6 +309,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 Toast.makeText(mainScreen.this,friendName,Toast.LENGTH_LONG).show();
                 addFriendsToListArray.add(friendName);
                 adapter.notifyDataSetChanged();
+                useFull.updateSelectedFriends(friendName);
                 break;
             }
             case R.id.addFriendsButton:{

@@ -18,7 +18,7 @@ public class User{
     public  String photoUrl;
     public String userUid;
     public String nickName;
-
+    public String groups;
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -29,6 +29,7 @@ public class User{
         this.photoUrl = photoUrl;
         this.userUid = userUid;
         this.nickName = nickName;
+        this.groups = null;
     }
 
     public void setUpUserNickName(String nickName){
