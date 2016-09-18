@@ -38,18 +38,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/mainScreen.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/mainScreen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/utils/User.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/utils/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/utils/usefull.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/utils/usefull.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_login_screen.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_login_screen.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main_screen.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main_screen.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_friends_edit_text.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_friends_edit_text.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/create_group.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/create_group.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_view_dialog.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_view_dialog.xml" />
     </list>
     <ignored path="smartHome.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,22 +71,24 @@
       <file leaf-file-name="mainScreen.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/mainScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.297479">
-              <caret line="130" column="18" selection-start-line="130" selection-start-column="18" selection-end-line="130" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.7074468">
+              <caret line="256" column="146" selection-start-line="256" selection-start-column="146" selection-end-line="256" selection-end-column="146" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5557#7624#0" expanded="true" />
-                <element signature="e#7623#7624#0" expanded="true" />
-                <element signature="e#8123#9110#0" expanded="true" />
-                <element signature="e#9109#9110#0" expanded="true" />
-                <element signature="e#9335#9963#0" expanded="true" />
-                <element signature="e#9962#9963#0" expanded="true" />
-                <element signature="e#10762#11477#0" expanded="true" />
-                <element signature="e#11022#11038#0" expanded="true" />
-                <element signature="e#11219#11235#0" expanded="true" />
-                <element signature="e#11476#11477#0" expanded="true" />
-                <element signature="e#14321#14805#0" expanded="true" />
-                <element signature="e#14804#14805#0" expanded="true" />
+                <element signature="e#3477#3508#0" expanded="true" />
+                <element signature="e#3510#3542#0" expanded="true" />
+                <element signature="e#5589#8366#0" expanded="true" />
+                <element signature="e#8365#8366#0" expanded="true" />
+                <element signature="e#8865#9793#0" expanded="true" />
+                <element signature="e#9792#9793#0" expanded="true" />
+                <element signature="e#10018#10646#0" expanded="true" />
+                <element signature="e#10645#10646#0" expanded="true" />
+                <element signature="e#11445#12553#0" expanded="true" />
+                <element signature="e#11905#11921#0" expanded="true" />
+                <element signature="e#12104#12120#0" expanded="true" />
+                <element signature="e#12552#12553#0" expanded="true" />
+                <element signature="e#15672#16156#0" expanded="true" />
+                <element signature="e#16155#16156#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -3273,22 +3266,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brunobraga/smarthome/mainScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.297479">
-          <caret line="130" column="18" selection-start-line="130" selection-start-column="18" selection-end-line="130" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.7074468">
+          <caret line="256" column="146" selection-start-line="256" selection-start-column="146" selection-end-line="256" selection-end-column="146" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5557#7624#0" expanded="true" />
-            <element signature="e#7623#7624#0" expanded="true" />
-            <element signature="e#8123#9110#0" expanded="true" />
-            <element signature="e#9109#9110#0" expanded="true" />
-            <element signature="e#9335#9963#0" expanded="true" />
-            <element signature="e#9962#9963#0" expanded="true" />
-            <element signature="e#10762#11477#0" expanded="true" />
-            <element signature="e#11022#11038#0" expanded="true" />
-            <element signature="e#11219#11235#0" expanded="true" />
-            <element signature="e#11476#11477#0" expanded="true" />
-            <element signature="e#14321#14805#0" expanded="true" />
-            <element signature="e#14804#14805#0" expanded="true" />
+            <element signature="e#3477#3508#0" expanded="true" />
+            <element signature="e#3510#3542#0" expanded="true" />
+            <element signature="e#5589#8366#0" expanded="true" />
+            <element signature="e#8365#8366#0" expanded="true" />
+            <element signature="e#8865#9793#0" expanded="true" />
+            <element signature="e#9792#9793#0" expanded="true" />
+            <element signature="e#10018#10646#0" expanded="true" />
+            <element signature="e#10645#10646#0" expanded="true" />
+            <element signature="e#11445#12553#0" expanded="true" />
+            <element signature="e#11905#11921#0" expanded="true" />
+            <element signature="e#12104#12120#0" expanded="true" />
+            <element signature="e#12552#12553#0" expanded="true" />
+            <element signature="e#15672#16156#0" expanded="true" />
+            <element signature="e#16155#16156#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -49,6 +49,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class mainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -131,11 +132,16 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                  }
 
                 EditText groupNameEditText = (EditText)cancelFriendsViewGroup.findViewById(R.id.groupNameEditText);
-                final String groupName = groupNameEditText.getText().toString();
+                final String groupName = groupNameEditText.getText().toString().trim().replaceAll(" +", " ");
+                System.out.println(groupName);
+                boolean groupNameMatcher = Pattern.matches("^[^0-9][^@#]+$",groupName);
+                if(!groupNameMatcher){
+                    Snackbar.make(view, "Group Name cannot start with spaces or numbers", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
                 CreateGroup createGroup = new CreateGroup(groupName,friendsToAddOnGroup);
                 mDatabase.child("groups").child("/"+groupName).setValue(createGroup);
-
-
                 DatabaseReference postRef = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
                 postRef.runTransaction(new Transaction.Handler() {
                     @Override
@@ -147,7 +153,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         } else {
                             u.groups = u.groups + "/" + groupName;
                         }
-
                         mutableData.setValue(u);
                         return Transaction.success(mutableData);
                     }
@@ -159,6 +164,12 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         if(databaseError == null){
                             Snackbar.make(view, "Group Created", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
+
+                            LinearLayout v  = (LinearLayout) findViewById(R.id.app_bar_main_screen_layout);
+                            oldLayout.setVisibility(View.INVISIBLE);
+                            oldLayout = v;
+                            oldLayout.setVisibility(View.VISIBLE);
+
                         }
                         else Log.d("ERROR FIREBASE TRANSACTION", "postTransaction:onComplete:" + databaseError);
                     }
@@ -181,7 +192,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 ViewGroup vg=(ViewGroup)view;
                 TextView txt = (TextView)vg.findViewById(R.id.txtitem);
                 ImageView image = (ImageView)vg.findViewById(R.id.addFriendsToListImageView);
-                Drawable background = txt.getBackground();
                 if(image.getDrawable() == null){
                     Resources res = getResources(); // need this to fetch the drawable
                     Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
@@ -232,14 +242,21 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
-                Map<String, Object> nickname = new HashMap<String, Object>();
-                nickname.put("nickName",et.getText().toString());
-                ref.updateChildren(nickname);
+                String userNickname = et.getText().toString();
+                boolean nickNameMatcher = Pattern.matches("^[^0-9 /t][^@# ]+$", userNickname);
+                if(nickNameMatcher) {
+                    Map<String, Object> nickname = new HashMap<String, Object>();
+                    nickname.put("nickName", userNickname);
+                    ref.updateChildren(nickname);
 
-                Map<String, Object> usersNicknames = new HashMap<String, Object>();
-                usersNicknames.put(et.getText().toString(),user.userUid);
-                DatabaseReference refNickNames = mDatabase.child("nickNames");
-                refNickNames.updateChildren(usersNicknames);
+                    Map<String, Object> usersNicknames = new HashMap<String, Object>();
+                    usersNicknames.put(userNickname, user.userUid);
+                    DatabaseReference refNickNames = mDatabase.child("nickNames");
+                    refNickNames.updateChildren(usersNicknames);
+                }else{
+                    Toast.makeText(mainScreen.this,"User nickname cannot start with number or countain spaces, # and @",Toast.LENGTH_LONG).show();
+                }
+
             }
 
         });
@@ -306,10 +323,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 EditText friendNameEditText = (EditText)footerView.findViewById(R.id.editTextAddFriendsToList);
                 String friendName = friendNameEditText.getText().toString();
                 //REGEX TO TEST NICKNAME;
-                Toast.makeText(mainScreen.this,friendName,Toast.LENGTH_LONG).show();
-                addFriendsToListArray.add(friendName);
-                adapter.notifyDataSetChanged();
-                useFull.updateSelectedFriends(friendName);
+                boolean nickNameMatcher = Pattern.matches("^[^0-9 /t][^@# ]+$", friendName);
+                if(nickNameMatcher){
+                    addFriendsToListArray.add(friendName);
+                    adapter.notifyDataSetChanged();
+                    useFull.updateSelectedFriends(friendName);
+                    friendNameEditText.setText("");
+                }
+                else Toast.makeText(mainScreen.this,"User nickname cannot start with number or countain spaces, # and @",Toast.LENGTH_LONG).show();
                 break;
             }
             case R.id.addFriendsButton:{
