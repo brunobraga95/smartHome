@@ -29,7 +29,7 @@ public class User{
         this.photoUrl = photoUrl;
         this.userUid = userUid;
         this.nickName = nickName;
-        this.groups = null;
+        this.groups = "/";
     }
 
     public void setUpUserNickName(String nickName){

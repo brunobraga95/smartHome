@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.brunobraga.smarthome.utils.CreateGroup;
+import com.example.brunobraga.smarthome.utils.CustomListAdapter;
 import com.example.brunobraga.smarthome.utils.User;
 import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
@@ -57,16 +57,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private FirebaseAuth mAuth;
     private static final String TAG_QUERY = "QUERY DEBBUG";
     private FirebaseUser userRef;
-    private LinearLayout oldLayout;
+    private LinearLayout oldLayout,oldLayoutTabs;
     private User user;
     private ListView addFriendslistView = null;
     private usefull useFull = new usefull();
-    private ViewGroup cancelFriendsViewGroup;
-    private ListView cancelFriendslistView;
-    private ArrayAdapter<String> adapterCancelFriends;
+    private ViewGroup cancelFriendsViewGroup,groupsTabViewGroup;
+    private ListView cancelFriendslistView,showGroupsListView;
+    private CustomListAdapter adapterCancelFriends,adapterShowGroup,adapterAddFriedsPopUp;
     private View footerView;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> addFriendsToListArray = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +74,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldLayout = (LinearLayout)findViewById(R.id.app_bar_main_screen_layout);
+        oldLayoutTabs = (LinearLayout)findViewById(R.id.tasksTab);
+
         cancelFriendsViewGroup = (ViewGroup)findViewById(R.id.createGroup);
         cancelFriendslistView = new ListView(mainScreen.this);
+        showGroupsListView = new ListView(mainScreen.this);
         mAuth = FirebaseAuth.getInstance();
         userRef = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -89,6 +90,39 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_screen);
+
+        addFriendslistView = null;
+        addFriendslistView=new ListView(mainScreen.this);
+        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList());
+        addFriendslistView.setAdapter(adapterAddFriedsPopUp);
+        footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
+        addFriendslistView.addFooterView(footerView);
+
+        addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ViewGroup vg=(ViewGroup)view;
+                TextView txt = (TextView)vg.findViewById(R.id.customListViewTextView);
+                String friendName = txt.getText().toString();
+                Resources res = getResources();
+                ImageView image = (ImageView)vg.findViewById(R.id.customListViewImageView);
+
+                if(!useFull.selectedFriends.contains(friendName )){
+                    res = getResources(); // need this to fetch the drawable
+                    Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
+                    image.setImageDrawable(draw);
+                    adapterAddFriedsPopUp.updateImage(adapterAddFriedsPopUp.getPos(friendName),R.drawable.ic_done_black_24dp);
+                }else {
+                    adapterAddFriedsPopUp.updateImage(adapterAddFriedsPopUp.getPos(friendName),R.drawable.ic_close_black_24dp);
+                    res = getResources(); // need this to fetch the drawable
+                    Drawable draw = res.getDrawable(R.drawable.ic_close_black_24dp);
+                    image.setImageDrawable(draw);
+                }
+                useFull.updateSelectedFriends(txt.getText().toString());
+            }
+
+        });
+
 
         if (userRef != null) {
             System.out.println(userRef);
@@ -148,8 +182,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         User u = mutableData.getValue(User.class);
 
-                        if (u.groups == null) {
-                            u.groups = groupName;
+                        if (u.groups.equals("/")) {
+                            u.groups = u.groups+groupName;
                         } else {
                             u.groups = u.groups + "/" + groupName;
                         }
@@ -177,40 +211,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             }
         });
 
-
-
-
-        addFriendslistView=new ListView(mainScreen.this);
-        adapter=new ArrayAdapter<String>(mainScreen.this,R.layout.list_view_dialog, R.id.txtitem,addFriendsToListArray);
-        addFriendslistView.setAdapter(adapter);
-        footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
-        addFriendslistView.addFooterView(footerView);
-
-        addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ViewGroup vg=(ViewGroup)view;
-                TextView txt = (TextView)vg.findViewById(R.id.txtitem);
-                ImageView image = (ImageView)vg.findViewById(R.id.addFriendsToListImageView);
-                if(image.getDrawable() == null){
-                    Resources res = getResources(); // need this to fetch the drawable
-                    Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
-                    image.setImageDrawable(draw);
-                }else {
-                    image.setImageDrawable(null);
-                }
-                useFull.updateSelectedFriends(txt.getText().toString());
-                Toast.makeText(mainScreen.this,txt.getText().toString(),Toast.LENGTH_LONG).show();
-            }
-
-        });
-
-        //BUG ON THIS LISTENER, THIS LISTENER IS SUPPOSED TO REMOVE FRIENDS FROM THE ADDFRIENDSTOGROUP LIST, ALTHOUGH IT IS REMOVING, IT WONT ACTUALLY DELETE THE VIEWS
         cancelFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ViewGroup vg=(ViewGroup)view;
-                TextView txt=(TextView)vg.findViewById(R.id.usersNameOnAddFriends);
+                TextView txt=(TextView)vg.findViewById(R.id.customListViewTextView);
                 useFull.selectedFriends.remove(txt.getText().toString());
                 adapterCancelFriends.remove(txt.getText().toString());
                 adapterCancelFriends.notifyDataSetChanged();
@@ -325,8 +330,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 //REGEX TO TEST NICKNAME;
                 boolean nickNameMatcher = Pattern.matches("^[^0-9 ][^@# ]+$", friendName);
                 if(nickNameMatcher){
-                    addFriendsToListArray.add(friendName);
-                    adapter.notifyDataSetChanged();
+                    adapterAddFriedsPopUp.add(friendName,R.drawable.ic_done_black_24dp);
+                    adapterAddFriedsPopUp.notifyDataSetChanged();
                     useFull.updateSelectedFriends(friendName);
                     friendNameEditText.setText("");
                 }
@@ -334,17 +339,58 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.addFriendsButton:{
-                AlertDialog.Builder addFriendsPopUp=new AlertDialog.Builder(mainScreen.this);
+
+                AlertDialog.Builder addFriendsPopUp = new AlertDialog.Builder(mainScreen.this);
                 addFriendsPopUp.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        adapterCancelFriends =new ArrayAdapter<String>(mainScreen.this,R.layout.cancel_friends_list, R.id.usersNameOnAddFriends,useFull.selectedFriends);
+                        cancelFriendsViewGroup.removeView(cancelFriendslistView);
+                        ArrayList imgid = new ArrayList();
+                        ArrayList names = new ArrayList();
+                        for(int i=0;i<useFull.selectedFriends.size();i++){
+                            imgid.add(R.drawable.ic_close_black_24dp);
+                            names.add(useFull.selectedFriends.get(i));
+                        }
+                        adapterCancelFriends = new CustomListAdapter(mainScreen.this,names,imgid);
                         cancelFriendslistView.setAdapter(adapterCancelFriends);;
                         cancelFriendsViewGroup.addView(cancelFriendslistView);
+
+                        addFriendslistView = null;
+                        addFriendslistView=new ListView(mainScreen.this);
+                        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList());
+                        addFriendslistView.setAdapter(adapterAddFriedsPopUp);
+                        footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
+                        addFriendslistView.addFooterView(footerView);
+
+                        addFriendslistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                ViewGroup vg=(ViewGroup)view;
+                                TextView txt = (TextView)vg.findViewById(R.id.customListViewTextView);
+                                String friendName = txt.getText().toString();
+                                Resources res = getResources();
+                                ImageView image = (ImageView)vg.findViewById(R.id.customListViewImageView);
+
+                                if(!useFull.selectedFriends.contains(friendName )){
+                                    res = getResources(); // need this to fetch the drawable
+                                    Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
+                                    image.setImageDrawable(draw);
+                                    adapterAddFriedsPopUp.updateImage(adapterAddFriedsPopUp.getPos(friendName),R.drawable.ic_done_black_24dp);
+                                }else {
+                                    adapterAddFriedsPopUp.updateImage(adapterAddFriedsPopUp.getPos(friendName),R.drawable.ic_close_black_24dp);
+                                    res = getResources(); // need this to fetch the drawable
+                                    Drawable draw = res.getDrawable(R.drawable.ic_close_black_24dp);
+                                    image.setImageDrawable(draw);
+                                }
+                                useFull.updateSelectedFriends(txt.getText().toString());
+                            }
+
+                        });
+
                     }
 
                 });
                 addFriendsPopUp.setView(addFriendslistView);
-                AlertDialog addFriendsDialog= addFriendsPopUp.create();
+                AlertDialog addFriendsDialog = addFriendsPopUp.create();
                 addFriendsDialog.show();
                 break;
             }
@@ -361,6 +407,11 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 groupsTougleButton.setBackgroundDrawable(drawUnselected);
                 recentTougleButton.setBackgroundDrawable(drawUnselected);
 
+                LinearLayout v  = (LinearLayout) findViewById(R.id.tasks_tab_layout);
+                oldLayoutTabs.setVisibility(View.INVISIBLE);
+                oldLayoutTabs = v;
+                oldLayoutTabs.setVisibility(View.VISIBLE);
+
                 break;
             }
 
@@ -376,6 +427,25 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 tasksTougleButton.setBackgroundDrawable(drawUnselected);
                 groupsTougleButton.setBackgroundDrawable(drawSelected);
                 recentTougleButton.setBackgroundDrawable(drawUnselected);
+
+                LinearLayout v  = (LinearLayout) findViewById(R.id.groups_tab_layout);
+                oldLayoutTabs.setVisibility(View.INVISIBLE);
+                oldLayoutTabs = v;
+                oldLayoutTabs.setVisibility(View.VISIBLE);
+
+                ArrayList groupNames = new ArrayList();
+                //RETRIEVE GROUPS NAMES FROM FIREBASE AND POPULATE HERE
+                groupNames.add("Group name");
+
+                ArrayList imgid = new ArrayList();
+                imgid.add(R.drawable.ic_people_black_24dp);
+                CustomListAdapter adapterShowGroup =new CustomListAdapter(this, groupNames, imgid);
+
+                showGroupsListView.setAdapter(adapterShowGroup);
+                groupsTabViewGroup = (ViewGroup)findViewById(R.id.groupsTab);
+                groupsTabViewGroup.removeAllViews();
+                groupsTabViewGroup.addView(showGroupsListView);
+
                 break;
             }
 

@@ -45,5 +45,25 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:visibility="invisible"
+        android:id="@+id/groups_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/groups_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tasks_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/tasks_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </RelativeLayout>
