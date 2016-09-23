@@ -72,14 +72,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="300dp"
-        android:layout_marginTop="300dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="In order to speed up the process users will be automatically added, please make sure to only invite friends"
-        android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabCreateGroup"

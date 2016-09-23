@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.brunobraga.smarthome.utils.CreateGroup;
 import com.example.brunobraga.smarthome.utils.CustomListAdapter;
+import com.example.brunobraga.smarthome.utils.CustomListAdapterGroupsTab;
 import com.example.brunobraga.smarthome.utils.User;
 import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
@@ -63,7 +64,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private usefull useFull = new usefull();
     private ViewGroup cancelFriendsViewGroup,groupsTabViewGroup;
     private ListView cancelFriendslistView,showGroupsListView;
-    private CustomListAdapter adapterCancelFriends,adapterShowGroup,adapterAddFriedsPopUp;
+    private CustomListAdapter adapterCancelFriends,adapterAddFriedsPopUp;
     private View footerView;
 
     @Override
@@ -93,7 +94,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         addFriendslistView = null;
         addFriendslistView=new ListView(mainScreen.this);
-        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList());
+        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList(),new ArrayList());
         addFriendslistView.setAdapter(adapterAddFriedsPopUp);
         footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
         addFriendslistView.addFooterView(footerView);
@@ -125,7 +126,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
 
         if (userRef != null) {
-            System.out.println(userRef);
             TextView userName = (TextView) headerView.findViewById(R.id.userName);
             ImageView profilePicture = (ImageView) headerView.findViewById(R.id.profilePicture);
             userName.setText(userRef.getDisplayName());
@@ -153,7 +153,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
 
         } else {
-            System.out.println("tem user logado nao");
+            Intent intent = new Intent(mainScreen.this,loginScreen.class);
+            startActivity(intent);
         }
         FloatingActionButton fabCreateGroup = (FloatingActionButton) findViewById(R.id.fabCreateGroup);
 
@@ -167,7 +168,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
                 EditText groupNameEditText = (EditText)cancelFriendsViewGroup.findViewById(R.id.groupNameEditText);
                 final String groupName = groupNameEditText.getText().toString().trim().replaceAll(" +", " ");
-                System.out.println(groupName);
                 boolean groupNameMatcher = Pattern.matches("^[^0-9][^@#]+$",groupName);
                 if(!groupNameMatcher){
                     Snackbar.make(view, "Group Name cannot start with spaces or numbers", Snackbar.LENGTH_LONG)
@@ -182,8 +182,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         User u = mutableData.getValue(User.class);
 
-                        if (u.groups.equals("/")) {
-                            u.groups = u.groups+groupName;
+                        if (u.groups == null || u.groups.equals("/")) {
+                            u.groups = groupName;
                         } else {
                             u.groups = u.groups + "/" + groupName;
                         }
@@ -203,6 +203,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                             oldLayout.setVisibility(View.INVISIBLE);
                             oldLayout = v;
                             oldLayout.setVisibility(View.VISIBLE);
+                            loadGrouptTab();
 
                         }
                         else Log.d("ERROR FIREBASE TRANSACTION", "postTransaction:onComplete:" + databaseError);
@@ -350,13 +351,13 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                             imgid.add(R.drawable.ic_close_black_24dp);
                             names.add(useFull.selectedFriends.get(i));
                         }
-                        adapterCancelFriends = new CustomListAdapter(mainScreen.this,names,imgid);
+                        adapterCancelFriends = new CustomListAdapter(mainScreen.this,names,imgid,null);
                         cancelFriendslistView.setAdapter(adapterCancelFriends);;
                         cancelFriendsViewGroup.addView(cancelFriendslistView);
 
                         addFriendslistView = null;
                         addFriendslistView=new ListView(mainScreen.this);
-                        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList());
+                        adapterAddFriedsPopUp = new CustomListAdapter(mainScreen.this,new ArrayList(),new ArrayList(),null);
                         addFriendslistView.setAdapter(adapterAddFriedsPopUp);
                         footerView =  ((LayoutInflater)mainScreen.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.add_friends_edit_text, null, false);
                         addFriendslistView.addFooterView(footerView);
@@ -395,57 +396,12 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.toggleButtonTasks:{
-                Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
-                Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
-                Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
-
-                Resources res = getResources();
-                Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
-                Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
-
-                tasksTougleButton.setBackgroundDrawable(drawSelected);
-                groupsTougleButton.setBackgroundDrawable(drawUnselected);
-                recentTougleButton.setBackgroundDrawable(drawUnselected);
-
-                LinearLayout v  = (LinearLayout) findViewById(R.id.tasks_tab_layout);
-                oldLayoutTabs.setVisibility(View.INVISIBLE);
-                oldLayoutTabs = v;
-                oldLayoutTabs.setVisibility(View.VISIBLE);
-
+                loadTasksTab();
                 break;
             }
 
             case R.id.toggleButtonGroups:{
-                Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
-                Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
-                Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
-
-                Resources res = getResources();
-                Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
-                Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
-
-                tasksTougleButton.setBackgroundDrawable(drawUnselected);
-                groupsTougleButton.setBackgroundDrawable(drawSelected);
-                recentTougleButton.setBackgroundDrawable(drawUnselected);
-
-                LinearLayout v  = (LinearLayout) findViewById(R.id.groups_tab_layout);
-                oldLayoutTabs.setVisibility(View.INVISIBLE);
-                oldLayoutTabs = v;
-                oldLayoutTabs.setVisibility(View.VISIBLE);
-
-                ArrayList groupNames = new ArrayList();
-                //RETRIEVE GROUPS NAMES FROM FIREBASE AND POPULATE HERE
-                groupNames.add("Group name");
-
-                ArrayList imgid = new ArrayList();
-                imgid.add(R.drawable.ic_people_black_24dp);
-                CustomListAdapter adapterShowGroup =new CustomListAdapter(this, groupNames, imgid);
-
-                showGroupsListView.setAdapter(adapterShowGroup);
-                groupsTabViewGroup = (ViewGroup)findViewById(R.id.groupsTab);
-                groupsTabViewGroup.removeAllViews();
-                groupsTabViewGroup.addView(showGroupsListView);
-
+                loadGrouptTab();
                 break;
             }
 
@@ -470,5 +426,75 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
+    public void loadTasksTab(){
+        Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
+        Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
+        Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
+
+        Resources res = getResources();
+        Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
+        Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+        tasksTougleButton.setBackgroundDrawable(drawSelected);
+        groupsTougleButton.setBackgroundDrawable(drawUnselected);
+        recentTougleButton.setBackgroundDrawable(drawUnselected);
+
+        LinearLayout v  = (LinearLayout) findViewById(R.id.tasks_tab_layout);
+        oldLayoutTabs.setVisibility(View.INVISIBLE);
+        oldLayoutTabs = v;
+        oldLayoutTabs.setVisibility(View.VISIBLE);
+    }
+
+    public void loadGrouptTab(){
+        Button tasksTougleButton = (Button)findViewById(R.id.toggleButtonTasks);
+        Button groupsTougleButton  = (Button)findViewById(R.id.toggleButtonGroups);
+        Button recentTougleButton  = (Button) findViewById(R.id.toggleButtonRecent);
+
+        Resources res = getResources();
+        Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
+        Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+        tasksTougleButton.setBackgroundDrawable(drawUnselected);
+        groupsTougleButton.setBackgroundDrawable(drawSelected);
+        recentTougleButton.setBackgroundDrawable(drawUnselected);
+
+        LinearLayout v  = (LinearLayout) findViewById(R.id.groups_tab_layout);
+        oldLayoutTabs.setVisibility(View.INVISIBLE);
+        oldLayoutTabs = v;
+        oldLayoutTabs.setVisibility(View.VISIBLE);
+
+        final ArrayList groupNames = new ArrayList();
+        final ArrayList imgid = new ArrayList();
+        final ArrayList subTitles = new ArrayList();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo/groups").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        String  snapShot = dataSnapshot.getValue().toString();
+                        String []groups = snapShot.split("/");
+                        for(int i=0;i<groups.length;i++){
+                            groupNames.add(groups[i]);
+                            imgid.add(R.drawable.ic_people_black_24dp);
+                            subTitles.add("testing subtitles about group");
+                        }
+                        CustomListAdapterGroupsTab adapterShowGroup =new CustomListAdapterGroupsTab(mainScreen.this, groupNames, imgid,subTitles);
+                        showGroupsListView.setAdapter(adapterShowGroup);
+                        groupsTabViewGroup = (ViewGroup)findViewById(R.id.groupsTab);
+                        groupsTabViewGroup.removeAllViews();
+                        groupsTabViewGroup.addView(showGroupsListView);
+                        adapterShowGroup.teste(1);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG_QUERY, "getUser:onCancelled", databaseError.toException());
+                        // ....
+                    }
+                });
+
+    }
 }
 

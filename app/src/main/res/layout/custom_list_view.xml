@@ -21,9 +21,20 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/customListViewTextView"
-            android:text="Bruno Braga"
+            android:text=""
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/customListViewSubTextView"
+            android:text=""
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
 
     </LinearLayout>
 

@@ -4,6 +4,7 @@ package com.example.brunobraga.smarthome.utils;
  * Created by brunobraga on 18/09/16.
  */
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +18,21 @@ import java.util.ArrayList;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
 
-    private final Activity context;
-    private final ArrayList itemname;
-    private final ArrayList imgid;
+    public Activity context;
+    public ArrayList itemname;
+    public ArrayList imgid;
+    public ArrayList subTitles;
 
-    public CustomListAdapter(Activity context, ArrayList itemname, ArrayList imgid) {
+    public CustomListAdapter(Activity context, ArrayList itemname, ArrayList imgid,ArrayList subTitles) {
         super(context, R.layout.custom_list_view, itemname);
         // TODO Auto-generated constructor stub
         this.context=context;
         this.itemname=itemname;
         this.imgid=imgid;
+        this.subTitles = subTitles;
     }
 
-    public View getView(int position,View view,ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.custom_list_view, null,true);
 
@@ -37,10 +40,13 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.customListViewImageView);
 
         txtTitle.setText(itemname.get(position).toString());
+
+        //txtTitle.setTextSize(100);
         imageView.setImageResource((Integer) imgid.get(position));
         return rowView;
 
     };
+
 
     public void remove(String name){
         this.imgid.remove(this.itemname.indexOf(name));
@@ -57,4 +63,19 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     public Integer getPos(String name){
         return this.itemname.indexOf(name);
     }
+
+    public void teste(int position) {
+        Log.d("TESTANDO CLASSE","ENTROU");
+        LayoutInflater inflater=context.getLayoutInflater();
+        View rowView=inflater.inflate(R.layout.custom_list_view, null,true);
+
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.customListViewTextView);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.customListViewImageView);
+
+        Log.d("TESTANDO CLASSE",txtTitle.getText().toString());
+        System.out.println(txtTitle.getText().toString());
+        imageView.setImageResource((Integer) imgid.get(position));
+        //return rowView;
+
+    };
 }

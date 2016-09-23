@@ -32,8 +32,4 @@ public class User{
         this.groups = "/";
     }
 
-    public void setUpUserNickName(String nickName){
-        this.nickName = nickName;
-    }
-
 }
