@@ -18,19 +18,20 @@ import java.util.ArrayList;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
 
-    public Activity context;
-    public ArrayList itemname;
-    public ArrayList imgid;
-    public ArrayList subTitles;
+    private Activity context;
+    private ArrayList itemName;
+    private ArrayList imgId;
+    private ArrayList subTitles;
 
     public CustomListAdapter(Activity context, ArrayList itemname, ArrayList imgid,ArrayList subTitles) {
         super(context, R.layout.custom_list_view, itemname);
         // TODO Auto-generated constructor stub
         this.context=context;
-        this.itemname=itemname;
-        this.imgid=imgid;
+        this.itemName=itemname;
+        this.imgId=imgid;
         this.subTitles = subTitles;
     }
+
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
@@ -39,43 +40,59 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.customListViewTextView);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.customListViewImageView);
 
-        txtTitle.setText(itemname.get(position).toString());
+        txtTitle.setText(itemName.get(position).toString());
 
-        //txtTitle.setTextSize(100);
-        imageView.setImageResource((Integer) imgid.get(position));
+        imageView.setImageResource((Integer) imgId.get(position));
         return rowView;
 
     };
 
 
     public void remove(String name){
-        this.imgid.remove(this.itemname.indexOf(name));
-        this.itemname.remove(name);
+        this.imgId.remove(this.itemName.indexOf(name));
+        this.itemName.remove(name);
 
     }
     public void updateImage(Integer pos, Integer image){
-        this.imgid.set(pos,image);
+        this.imgId.set(pos,image);
     }
     public void add(String name, Integer image){
-        this.itemname.add(name);
-        this.imgid.add(image);
+        this.itemName.add(name);
+        this.imgId.add(image);
     }
     public Integer getPos(String name){
-        return this.itemname.indexOf(name);
+        return this.itemName.indexOf(name);
     }
 
-    public void teste(int position) {
-        Log.d("TESTANDO CLASSE","ENTROU");
-        LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.custom_list_view, null,true);
+    public Activity getContextListAdapter() {
+        return context;
+    }
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.customListViewTextView);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.customListViewImageView);
+    public void getContextListAdapterListAdapter(Activity context) {
+        this.context = context;
+    }
 
-        Log.d("TESTANDO CLASSE",txtTitle.getText().toString());
-        System.out.println(txtTitle.getText().toString());
-        imageView.setImageResource((Integer) imgid.get(position));
-        //return rowView;
+    public ArrayList getItemName() {
+        return itemName;
+    }
 
-    };
+    public void setItemName(ArrayList itemName) {
+        this.itemName = itemName;
+    }
+
+    public ArrayList getSubTitles() {
+        return subTitles;
+    }
+
+    public void setSubTitles(ArrayList subTitles) {
+        this.subTitles = subTitles;
+    }
+
+    public ArrayList getImgId() {
+        return imgId;
+    }
+
+    public void setImgId(ArrayList imgId) {
+        this.imgId = imgId;
+    }
 }

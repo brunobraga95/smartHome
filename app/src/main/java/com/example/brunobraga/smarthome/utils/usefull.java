@@ -7,19 +7,29 @@ import java.util.ArrayList;
  */
 
 public class usefull {
-    public ArrayList selectedFriends = new ArrayList();
+    private ArrayList selectedFriends = new ArrayList();
 
     void useful(){
-
+        selectedFriends = new ArrayList();
     }
+
+
     public void updateSelectedFriends(String name){
-        if(selectedFriends.isEmpty()){
+        if(this.selectedFriends.isEmpty()){
             selectedFriends.add(name);
             return;
         }
         if(selectedFriends.contains(name))selectedFriends.remove(name);
         else selectedFriends.add(name);
 
+    }
+
+    public ArrayList getSelectedFriends() {
+        return selectedFriends;
+    }
+
+    public void setSelectedFriends(ArrayList selectedFriends) {
+        this.selectedFriends = selectedFriends;
     }
 }
 

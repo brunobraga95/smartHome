@@ -13,13 +13,14 @@ import java.util.HashMap;
  */
 @IgnoreExtraProperties
 public class User{
-    public String username;
-    public String email;
-    public  String photoUrl;
-    public String userUid;
-    public String nickName;
-    public String groups;
-    public User() {
+    private String username;
+    private String email;
+    private  String photoUrl;
+    private String userUid;
+    private String nickName;
+    private String groups;
+
+    private User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
@@ -32,4 +33,51 @@ public class User{
         this.groups = "/";
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getGroups() {
+        return groups;
+    }
+
+    public void setGroups(String groups) {
+        this.groups = groups;
+    }
 }

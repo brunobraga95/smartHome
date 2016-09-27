@@ -108,7 +108,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 Resources res = getResources();
                 ImageView image = (ImageView)vg.findViewById(R.id.customListViewImageView);
 
-                if(!useFull.selectedFriends.contains(friendName )){
+                if(!useFull.getSelectedFriends().contains(friendName )){
                     res = getResources(); // need this to fetch the drawable
                     Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
                     image.setImageDrawable(draw);
@@ -139,7 +139,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // Get user value
                             user = dataSnapshot.getValue(User.class);
-                            if(user.nickName == null){
+                            if(user.getNickName() == null){
                                 setUpNickNamePopUp(user);
                             }
                         }
@@ -162,8 +162,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             @Override
             public void onClick(final View view) {
                 ArrayList friendsToAddOnGroup = new ArrayList();
-                for(int i=0;i<useFull.selectedFriends.size();i++){
-                    friendsToAddOnGroup.add(useFull.selectedFriends.get(i));
+                for(int i=0;i<useFull.getSelectedFriends().size();i++){
+                    friendsToAddOnGroup.add(useFull.getSelectedFriends().get(i));
                  }
 
                 EditText groupNameEditText = (EditText)cancelFriendsViewGroup.findViewById(R.id.groupNameEditText);
@@ -176,16 +176,16 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 }
                 CreateGroup createGroup = new CreateGroup(groupName,friendsToAddOnGroup);
                 mDatabase.child("groups").child("/"+groupName).setValue(createGroup);
-                DatabaseReference postRef = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
+                DatabaseReference postRef = mDatabase.child("/usersUid/"+user.getUserUid()+"/userInfo");
                 postRef.runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         User u = mutableData.getValue(User.class);
 
-                        if (u.groups == null || u.groups.equals("/")) {
-                            u.groups = groupName;
+                        if (u.getGroups() == null || u.getGroups().equals("/")) {
+                            u.setGroups(groupName);
                         } else {
-                            u.groups = u.groups + "/" + groupName;
+                            u.setGroups(u.getGroups() + "/" + groupName);
                         }
                         mutableData.setValue(u);
                         return Transaction.success(mutableData);
@@ -217,7 +217,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ViewGroup vg=(ViewGroup)view;
                 TextView txt=(TextView)vg.findViewById(R.id.customListViewTextView);
-                useFull.selectedFriends.remove(txt.getText().toString());
+                useFull.getSelectedFriends().remove(txt.getText().toString());
                 adapterCancelFriends.remove(txt.getText().toString());
                 adapterCancelFriends.notifyDataSetChanged();
                 cancelFriendslistView.setDivider(null);
@@ -240,14 +240,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     public void setUpNickNamePopUp(final User user){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mainScreen.this);
         final EditText et = new EditText(mainScreen.this);
-        alertDialogBuilder.setTitle("Welcome "+user.username);
+        alertDialogBuilder.setTitle("Welcome "+user.getUsername());
         alertDialogBuilder.setMessage("Please Choose a Nick name");
         alertDialogBuilder.setView(et);
         alertDialogBuilder.create();
 
         alertDialogBuilder.setCancelable(true).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                DatabaseReference ref = mDatabase.child("/usersUid/"+user.userUid+"/userInfo");
+                DatabaseReference ref = mDatabase.child("/usersUid/"+user.getUserUid()+"/userInfo");
                 String userNickname = et.getText().toString();
                 boolean nickNameMatcher = Pattern.matches("^[^0-9 ][^@# ]+$", userNickname);
                 if(nickNameMatcher) {
@@ -256,7 +256,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                     ref.updateChildren(nickname);
 
                     Map<String, Object> usersNicknames = new HashMap<String, Object>();
-                    usersNicknames.put(userNickname, user.userUid);
+                    usersNicknames.put(userNickname, user.getUserUid());
                     DatabaseReference refNickNames = mDatabase.child("nickNames");
                     refNickNames.updateChildren(usersNicknames);
                 }else{
@@ -347,9 +347,9 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         cancelFriendsViewGroup.removeView(cancelFriendslistView);
                         ArrayList imgid = new ArrayList();
                         ArrayList names = new ArrayList();
-                        for(int i=0;i<useFull.selectedFriends.size();i++){
+                        for(int i=0;i<useFull.getSelectedFriends().size();i++){
                             imgid.add(R.drawable.ic_close_black_24dp);
-                            names.add(useFull.selectedFriends.get(i));
+                            names.add(useFull.getSelectedFriends().get(i));
                         }
                         adapterCancelFriends = new CustomListAdapter(mainScreen.this,names,imgid,null);
                         cancelFriendslistView.setAdapter(adapterCancelFriends);;
@@ -371,7 +371,7 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                                 Resources res = getResources();
                                 ImageView image = (ImageView)vg.findViewById(R.id.customListViewImageView);
 
-                                if(!useFull.selectedFriends.contains(friendName )){
+                                if(!useFull.getSelectedFriends().contains(friendName )){
                                     res = getResources(); // need this to fetch the drawable
                                     Drawable draw = res.getDrawable( R.drawable.ic_done_black_24dp);
                                     image.setImageDrawable(draw);
@@ -485,7 +485,6 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         groupsTabViewGroup = (ViewGroup)findViewById(R.id.groupsTab);
                         groupsTabViewGroup.removeAllViews();
                         groupsTabViewGroup.addView(showGroupsListView);
-                        adapterShowGroup.teste(1);
                     }
 
                     @Override
