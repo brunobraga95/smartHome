@@ -28,13 +28,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.brunobraga.smarthome.utils.CreateGroup;
 import com.example.brunobraga.smarthome.utils.CustomListAdapter;
 import com.example.brunobraga.smarthome.utils.CustomListAdapterGroupsTab;
+import com.example.brunobraga.smarthome.utils.UseFull;
 import com.example.brunobraga.smarthome.utils.User;
-import com.example.brunobraga.smarthome.utils.usefull;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,11 +62,12 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
     private LinearLayout oldLayout,oldLayoutTabs;
     private User user;
     private ListView addFriendslistView = null;
-    private usefull useFull = new usefull();
+    private UseFull useFull = new UseFull();
     private ViewGroup cancelFriendsViewGroup,groupsTabViewGroup;
     private ListView cancelFriendslistView,showGroupsListView;
     private CustomListAdapter adapterCancelFriends,adapterAddFriedsPopUp;
     private View footerView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +126,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         });
 
+        showGroupsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ViewGroup vg=(ViewGroup)view;
+                TextView txt = (TextView)vg.findViewById(R.id.customListViewTextView);
+                String groupName = txt.getText().toString();
+                System.out.println(groupName);
+            }});
 
         if (userRef != null) {
             TextView userName = (TextView) headerView.findViewById(R.id.userName);
@@ -467,12 +477,13 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         final ArrayList imgid = new ArrayList();
         final ArrayList subTitles = new ArrayList();
 
+        progressBar = (ProgressBar)findViewById(R.id.progressBar1);
+        progressBar.setVisibility(View.VISIBLE);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("usersUid").child(userRef.getUid()+"/userInfo/groups").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
                         String  snapShot = dataSnapshot.getValue().toString();
                         String []groups = snapShot.split("/");
                         for(int i=0;i<groups.length;i++){
@@ -485,6 +496,8 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                         groupsTabViewGroup = (ViewGroup)findViewById(R.id.groupsTab);
                         groupsTabViewGroup.removeAllViews();
                         groupsTabViewGroup.addView(showGroupsListView);
+                        progressBar.setVisibility(View.GONE);
+
                     }
 
                     @Override

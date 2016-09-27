@@ -18,11 +18,7 @@ public class CustomListAdapterCancelFriends extends CustomListAdapter {
     public CustomListAdapterCancelFriends(Activity context, ArrayList itemname, ArrayList imgid,ArrayList subTitles) {
         super(context, itemname, imgid,subTitles);
     }
-    /*
-    private Activity context;
-    private ArrayList itemname;
-    private ArrayList imgid;
-    private ArrayList subTitles;*/
+
     public View getView(int position, View view, ViewGroup parent) {
         Activity context = this.getContextListAdapter();
         ArrayList itemName = this.getItemName();
@@ -36,7 +32,6 @@ public class CustomListAdapterCancelFriends extends CustomListAdapter {
 
         txtTitle.setText(itemName.get(position).toString());
 
-        //txtTitle.setTextSize(100);
         imageView.setImageResource((Integer) imgId.get(position));
         return rowView;
 

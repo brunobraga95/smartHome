@@ -15,4 +15,5 @@
         android:orientation="vertical"
         >
 </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
