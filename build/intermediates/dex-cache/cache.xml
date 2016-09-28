@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="24.0.2"
-        sha1="bd8796f67b49926c3bdd810a0cdbcd1b65a63532">
-        <dex dex="/home/brunobraga/Downloads/projects/smartHome/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_296a46639f94f1c9d54155223d9bf002162ec3c5/classes.dex" />
-    </item>
-
-</items>
+<items version="2" />

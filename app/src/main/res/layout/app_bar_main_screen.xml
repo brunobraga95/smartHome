@@ -21,8 +21,8 @@
             android:id="@+id/toggleButtonTasks"
             android:onClick="onClick"
             android:background="@drawable/tab_host_button_shape_selected"
-
-             />
+            android:textColor="#000000"
+            />
 
         <Button
             android:layout_width="wrap_content"
@@ -32,6 +32,7 @@
             android:id="@+id/toggleButtonGroups"
             android:onClick="onClick"
             android:background="@drawable/tab_host_button_shape_unselected"
+            android:textColor="#FFFFFF"
             />
 
         <Button
@@ -42,6 +43,8 @@
             android:id="@+id/toggleButtonRecent"
             android:onClick="onClick"
             android:background="@drawable/tab_host_button_shape_unselected"
+            android:textColor="#FFFFFF"
+
             />
     </LinearLayout>
 

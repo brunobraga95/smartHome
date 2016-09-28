@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,11 +32,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.brunobraga.smarthome.utils.CreateGroup;
-import com.example.brunobraga.smarthome.utils.CustomListAdapter;
-import com.example.brunobraga.smarthome.utils.CustomListAdapterGroupsTab;
-import com.example.brunobraga.smarthome.utils.UseFull;
-import com.example.brunobraga.smarthome.utils.User;
+
+import com.example.brunobraga.smarthome.utils.*;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,7 +46,9 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -133,6 +133,9 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 TextView txt = (TextView)vg.findViewById(R.id.customListViewTextView);
                 String groupName = txt.getText().toString();
                 System.out.println(groupName);
+                Intent intent = new Intent(mainScreen.this, GroupScreen.class);
+                intent.putExtra("currentGroup",groupName);
+                startActivity(intent);
             }});
 
         if (userRef != null) {
@@ -184,14 +187,19 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                             .setAction("Action", null).show();
                     return;
                 }
-                CreateGroup createGroup = new CreateGroup(groupName,friendsToAddOnGroup);
+                Calendar c = Calendar.getInstance();
+                System.out.println("Current time => " + c.getTime());
+
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(c.getTime());
+
+                CreateGroup createGroup = new CreateGroup(friendsToAddOnGroup,formattedDate);
                 mDatabase.child("groups").child("/"+groupName).setValue(createGroup);
                 DatabaseReference postRef = mDatabase.child("/usersUid/"+user.getUserUid()+"/userInfo");
                 postRef.runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         User u = mutableData.getValue(User.class);
-
                         if (u.getGroups() == null || u.getGroups().equals("/")) {
                             u.setGroups(groupName);
                         } else {
@@ -424,6 +432,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
                 Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
 
+                tasksTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
+                groupsTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
+                recentTougleButton.setTextColor(Color.parseColor("#000000"));
+
                 tasksTougleButton.setBackgroundDrawable(drawUnselected);
                 groupsTougleButton.setBackgroundDrawable(drawUnselected);
                 recentTougleButton.setBackgroundDrawable(drawSelected);
@@ -445,6 +457,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
         Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
 
+        tasksTougleButton.setTextColor(Color.parseColor("#000000"));
+        groupsTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
+        recentTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
+
         tasksTougleButton.setBackgroundDrawable(drawSelected);
         groupsTougleButton.setBackgroundDrawable(drawUnselected);
         recentTougleButton.setBackgroundDrawable(drawUnselected);
@@ -463,6 +479,10 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
         Resources res = getResources();
         Drawable drawSelected = res.getDrawable( R.drawable.tab_host_button_shape_selected);
         Drawable drawUnselected = res.getDrawable( R.drawable.tab_host_button_shape_unselected);
+
+        tasksTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
+        groupsTougleButton.setTextColor(Color.parseColor("#000000"));
+        recentTougleButton.setTextColor(Color.parseColor("#FFFFFF"));
 
         tasksTougleButton.setBackgroundDrawable(drawUnselected);
         groupsTougleButton.setBackgroundDrawable(drawSelected);
@@ -484,12 +504,14 @@ public class mainScreen extends AppCompatActivity implements NavigationView.OnNa
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String  snapShot = dataSnapshot.getValue().toString();
-                        String []groups = snapShot.split("/");
-                        for(int i=0;i<groups.length;i++){
-                            groupNames.add(groups[i]);
-                            imgid.add(R.drawable.ic_people_black_24dp);
-                            subTitles.add("testing subtitles about group");
+                        String  groups[];
+                        if(dataSnapshot.getValue()!=null){
+                            groups = dataSnapshot.getValue().toString().split("/");
+                            for(int i=0;i<groups.length;i++){
+                                groupNames.add(groups[i]);
+                                imgid.add(R.drawable.ic_people_black_24dp);
+                                subTitles.add("testing subtitles about group");
+                            }
                         }
                         CustomListAdapterGroupsTab adapterShowGroup =new CustomListAdapterGroupsTab(mainScreen.this, groupNames, imgid,subTitles);
                         showGroupsListView.setAdapter(adapterShowGroup);
